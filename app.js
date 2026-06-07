@@ -1,6 +1,7 @@
-let trucks = [];
-let trailers = [];
-let drivers = [];
+let trucks = JSON.parse(localStorage.getItem("trucks")) || [];
+let trailers = JSON.parse(localStorage.getItem("trailers")) || [];
+let drivers = JSON.parse(localStorage.getItem("drivers")) || [];
+let services = JSON.parse(localStorage.getItem("services")) || [];
 
 function showSection(id){
 
@@ -43,9 +44,14 @@ function addDriver(){
 drivers.push({
 name: driverName.value
 });
-
+localStorage.setItem("trucks", JSON.stringify(trucks));
+localStorage.setItem("trailers", JSON.stringify(trailers));
+localStorage.setItem("drivers", JSON.stringify(drivers));
+localStorage.setItem("services", JSON.stringify(services));j
 render();
-
+window.onload = function(){
+    render();
+}
 }
 
 function render(){
