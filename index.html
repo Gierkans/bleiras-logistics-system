@@ -1,140 +1,209 @@
 <!DOCTYPE html>
 <html lang="lt">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bleiras Logistics System</title>
+<title>Bleiras Fleet Management V6</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="sidebar">
-    <h2>BLEIRAS</h2>
 
-    <button onclick="showSection('dashboard')">🏠 Dashboard</button>
-    <button onclick="showSection('trucks')">🚛 Autovežiai</button>
-    <button onclick="showSection('trailers')">🚚 Priekabos</button>
-    <button onclick="showSection('drivers')">👨‍✈️ Vairuotojai</button>
-   <button onclick="showSection('service')">🔧 Servisas</button> 
+<h2>BLEIRAS</h2>
+
+<button onclick="showSection('dashboard')">
+🏠 Dashboard
+</button>
+
+<button onclick="showSection('trucks')">
+🚛 Autovežiai
+</button>
+
+<button onclick="showSection('trailers')">
+🚚 Priekabos
+</button>
+
+<button onclick="showSection('drivers')">
+👨‍✈️ Vairuotojai
+</button>
+
+<button onclick="showSection('defects')">
+🔧 Gedimai
+</button>
+
 </div>
 
 <div class="main">
 
-    <div id="dashboard" class="section">
-        <h1>Dashboard</h1>
+<!-- Dashboard -->
 
-        <div class="cards">
-            <div class="card">
-                <h3>🚛 Autovežiai</h3>
-                <span id="truckCount">0</span>
-            </div>
+<div id="dashboard" class="section">
 
-            <div class="card">
-                <h3>🚚 Priekabos</h3>
-                <span id="trailerCount">0</span>
-            </div>
+<h1>Dashboard</h1>
 
-            <div class="card">
-                <h3>👨‍✈️ Vairuotojai</h3>
-                <span id="driverCount">0</span>
-            </div>
-        </div>
-    </div>
+<div class="cards">
 
-    <div id="trucks" class="section hidden">
+<div class="card">
+<h3>🚛 Autovežiai</h3>
+<span id="truckCount">0</span>
+</div>
 
-        <h1>Autovežiai</h1>
+<div class="card">
+<h3>🚚 Priekabos</h3>
+<span id="trailerCount">0</span>
+</div>
 
-        <input id="truckNumber" placeholder="Numeris">
-        <input id="truckBrand" placeholder="Markė">
-        <input id="truckModel" placeholder="Modelis">
-        <input id="truckMileage" placeholder="Rida">
-
-        <button onclick="addTruck()">Pridėti</button>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Numeris</th>
-                    <th>Markė</th>
-                    <th>Modelis</th>
-                    <th>Rida</th>
-                </tr>
-            </thead>
-
-            <tbody id="truckTable"></tbody>
-        </table>
-
-    </div>
-
-    <div id="trailers" class="section hidden">
-
-        <h1>Priekabos</h1>
-
-        <input id="trailerNumber" placeholder="Numeris">
-        <input id="trailerType" placeholder="Tipas">
-
-        <button onclick="addTrailer()">Pridėti</button>
-
-        <table>
-            <tbody id="trailerTable"></tbody>
-        </table>
-
-    </div>
-
-    <div id="drivers" class="section hidden">
-
-        <h1>Vairuotojai</h1>
-
-        <input id="driverName" placeholder="Vardas Pavardė">
-
-        <button onclick="addDriver()">Pridėti</button>
-
-        <table>
-            <tbody id="driverTable"></tbody>
-        </table>
-
-    </div>
+<div class="card">
+<h3>👨‍✈️ Vairuotojai</h3>
+<span id="driverCount">0</span>
+</div>
 
 </div>
 
-<script src="app.js"></script>
-<div id="service" class="section hidden">
+</div>
 
-<h1>Serviso užsakymai</h1>
+<!-- AUTOVEŽIAI -->
 
-<input id="serviceTruck" placeholder="Autovežio numeris">
+<div id="trucks" class="section hidden">
 
-<input id="serviceIssue" placeholder="Gedimas">
+<h1>Autovežiai</h1>
 
-<select id="servicePriority">
-<option>Žemas</option>
-<option>Vidutinis</option>
-<option>Aukštas</option>
-<option>Kritinis</option>
-</select>
+<input id="truckNumber" placeholder="Numeris">
 
-<input id="serviceMechanic" placeholder="Mechanikas">
+<input id="truckBrand" placeholder="Markė">
 
-<button onclick="addService()">
-Registruoti gedimą
+<input id="truckModel" placeholder="Modelis">
+
+<input id="truckMileage" placeholder="Rida">
+
+<button class="action"
+onclick="addTruck()">
+Pridėti autovežį
 </button>
 
 <table>
+
 <thead>
 <tr>
-<th>Autovežis</th>
-<th>Gedimas</th>
-<th>Prioritetas</th>
-<th>Mechanikas</th>
+<th>Numeris</th>
+<th>Markė</th>
+<th>Modelis</th>
+<th>Rida</th>
 </tr>
 </thead>
 
-<tbody id="serviceTable">
+<tbody id="truckTable">
 </tbody>
 
 </table>
 
 </div>
+
+<!-- PRIEKABOS -->
+
+<div id="trailers" class="section hidden">
+
+<h1>Priekabos</h1>
+
+<input id="trailerNumber"
+placeholder="Numeris">
+
+<input id="trailerType"
+placeholder="Tipas">
+
+<button class="action"
+onclick="addTrailer()">
+Pridėti priekabą
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>Numeris</th>
+<th>Tipas</th>
+</tr>
+</thead>
+
+<tbody id="trailerTable">
+</tbody>
+
+</table>
+
+</div>
+
+<!-- VAIRUOTOJAI -->
+
+<div id="drivers" class="section hidden">
+
+<h1>Vairuotojai</h1>
+
+<input id="driverName"
+placeholder="Vardas Pavardė">
+
+<button class="action"
+onclick="addDriver()">
+Pridėti vairuotoją
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>Vairuotojas</th>
+</tr>
+</thead>
+
+<tbody id="driverTable">
+</tbody>
+
+</table>
+
+</div>
+
+<!-- GEDIMAI -->
+
+<div id="defects" class="section hidden">
+
+<h1>Gedimų registras</h1>
+
+<input id="defectTruck"
+placeholder="Autovežio numeris">
+
+<textarea
+id="defectText"
+placeholder="Gedimo aprašymas">
+</textarea>
+
+<button class="action"
+onclick="addDefect()">
+Registruoti gedimą
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>Data</th>
+<th>Autovežis</th>
+<th>Gedimas</th>
+</tr>
+</thead>
+
+<tbody id="defectTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
