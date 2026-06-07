@@ -15,6 +15,7 @@
     <button onclick="showSection('trucks')">🚛 Autovežiai</button>
     <button onclick="showSection('trailers')">🚚 Priekabos</button>
     <button onclick="showSection('drivers')">👨‍✈️ Vairuotojai</button>
+   <button onclick="showSection('service')">🔧 Servisas</button> 
 </div>
 
 <div class="main">
@@ -98,6 +99,42 @@
 </div>
 
 <script src="app.js"></script>
+<div id="service" class="section hidden">
 
+<h1>Serviso užsakymai</h1>
+
+<input id="serviceTruck" placeholder="Autovežio numeris">
+
+<input id="serviceIssue" placeholder="Gedimas">
+
+<select id="servicePriority">
+<option>Žemas</option>
+<option>Vidutinis</option>
+<option>Aukštas</option>
+<option>Kritinis</option>
+</select>
+
+<input id="serviceMechanic" placeholder="Mechanikas">
+
+<button onclick="addService()">
+Registruoti gedimą
+</button>
+
+<table>
+<thead>
+<tr>
+<th>Autovežis</th>
+<th>Gedimas</th>
+<th>Prioritetas</th>
+<th>Mechanikas</th>
+</tr>
+</thead>
+
+<tbody id="serviceTable">
+</tbody>
+
+</table>
+
+</div>
 </body>
 </html>
