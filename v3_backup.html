@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bleiras V3</title>
+<style>
+body{font-family:Arial;margin:20px;background:#f4f6f9}
+.card{background:white;padding:15px;border-radius:10px;margin-bottom:15px}
+input,select,textarea,button{width:100%;padding:8px;margin:5px 0}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:8px}
+th{background:#1976d2;color:white}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:#e3f2fd;padding:10px;border-radius:8px;min-width:120px}
+</style>
+</head>
+<body>
 
+<div class="card" id="loginBox">
+<h2>Bleiras V3 Prisijungimas</h2>
+<select id="role">
+<option>Admin</option>
+<option>Vadybininkas</option>
+<option>Mechanikas</option>
+</select>
+<button onclick="login()">Prisijungti</button>
+</div>
+
+<div id="app" style="display:none">
+<div class="card">
+<h2>Bleiras Logistics V3</h2>
+<div>Rolė: <span id="currentRole"></span></div>
+</div>
+
+<div class="card">
+<h3>Naujas užsakymas</h3>
+<input id="vardas" placeholder="Klientas">
+<input id="auto" placeholder="Automobilis">
+<textarea id="problema" placeholder="Problema"></textarea>
+<button onclick="addOrder()">Sukurti</button>
+</div>
+
+<div class="card">
+<input id="search" placeholder="Paieška..." oninput="render()">
+<div class="stats">
+<div class="stat">Viso: <span id="s1">0</span></div>
+<div class="stat">Nauji: <span id="s2">0</span></div>
+<div class="stat">Baigti: <span id="s3">0</span></div>
+</div>
+</div>
+
+<div class="card">
+<table>
+<thead><tr><th>Nr</th><th>Klientas</th><th>Auto</th><th>Statusas</th><th>Mechanikas</th><th>Pastabos</th><th>AI</th></tr></thead>
+<tbody id="tbl"></tbody>
+</table>
+</div>
+</div>
+
+<script>
+let orders=JSON.parse(localStorage.getItem("bleiras_v3")||"[]");
+
+function login(){
+ document.getElementById('currentRole').innerText=document.getElementById('role').value;
+ document.getElementById('loginBox').style.display='none';
+ document.getElementById('app').style.display='block';
+ render();
+}
+
+function save(){
+ localStorage.setItem("bleiras_v3",JSON.stringify(orders));
+}
+
+function addOrder(){
+ orders.push({
+  id:"BL-"+Math.floor(Math.random()*99999),
+  klientas:vardas.value,
+  auto:auto.value,
+  problema:problema.value,
+  statusas:"Naujas",
+  mechanikas:"Jonas",
+  pastabos:""
+ });
+ save(); render();
+}
+
+function aiText(p){
+ p=p.toLowerCase();
+ if(p.includes("žib")) return "Patikrinti lemputę, saugiklį ir instaliaciją.";
+ if(p.includes("stik")) return "Įvertinti stiklo keitimo poreikį.";
+ return "Reikalinga diagnostika.";
+}
+
+function render(){
+ let q=(document.getElementById('search')?.value||'').toLowerCase();
+ let rows="";
+ let filtered=orders.filter(o=>JSON.stringify(o).toLowerCase().includes(q));
+
+ filtered.forEach((o,i)=>{
+ rows+=`<tr>
+ <td>${o.id}</td>
+ <td>${o.klientas}</td>
+ <td>${o.auto}</td>
+ <td>
+ <select onchange="orders[${i}].statusas=this.value;save();render();">
+ <option ${o.statusas=='Naujas'?'selected':''}>Naujas</option>
+ <option ${o.statusas=='Diagnostika'?'selected':''}>Diagnostika</option>
+ <option ${o.statusas=='Remontuojama'?'selected':''}>Remontuojama</option>
+ <option ${o.statusas=='Baigta'?'selected':''}>Baigta</option>
+ </select>
+ </td>
+ <td>
+ <select onchange="orders[${i}].mechanikas=this.value;save();">
+ <option>Jonas</option><option>Petras</option><option>Marius</option>
+ </select>
+ </td>
+ <td><input value="${o.pastabos}" onchange="orders[${i}].pastabos=this.value;save();"></td>
+ <td><button onclick="alert('${aiText(o.problema)}')">🤖 AI</button></td>
+ </tr>`;
+ });
+ document.getElementById('tbl').innerHTML=rows;
+ document.getElementById('s1').innerText=orders.length;
+ document.getElementById('s2').innerText=orders.filter(x=>x.statusas=='Naujas').length;
+ document.getElementById('s3').innerText=orders.filter(x=>x.statusas=='Baigta').length;
+}
+</script>
+</body>
+</html>
