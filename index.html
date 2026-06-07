@@ -3,95 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bleiras Fleet & Service V4</title>
-<style>
-body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5}
-.sidebar{position:fixed;left:0;top:0;width:240px;height:100%;background:#c62828;color:#fff;padding:20px;box-sizing:border-box}
-.sidebar h2{color:#ffc107}
-.sidebar div{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.15)}
-.main{margin-left:240px;padding:20px}
-.cards{display:flex;flex-wrap:wrap;gap:15px}
-.card{background:#fff;padding:15px;border-radius:10px;min-width:180px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.section{background:#fff;padding:15px;border-radius:10px;margin-top:20px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-input,textarea,button{width:100%;padding:10px;margin:5px 0;box-sizing:border-box}
-button{background:#c62828;color:white;border:none}
-table{width:100%;border-collapse:collapse}
-th,td{border:1px solid #ddd;padding:8px}
-th{background:#ffc107}
-</style>
+<title>Bleiras Logistics System</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="sidebar">
-<h2>BLEIRAS</h2>
-<div>🏠 Dashboard</div>
-<div>🚛 Autovežiai</div>
-<div>🚚 Priekabos</div>
-<div>🚗 Automobiliai</div>
-<div>👤 Klientai</div>
-<div>🔧 Servisas</div>
-<div>📷 Defektai</div>
-<div>📊 Ataskaitos</div>
-<div>🤖 AI Asistentas</div>
+    <h2>BLEIRAS</h2>
+
+    <button onclick="showSection('dashboard')">🏠 Dashboard</button>
+    <button onclick="showSection('trucks')">🚛 Autovežiai</button>
+    <button onclick="showSection('trailers')">🚚 Priekabos</button>
+    <button onclick="showSection('drivers')">👨‍✈️ Vairuotojai</button>
 </div>
 
 <div class="main">
-<h1>Bleiras Fleet & Service V4</h1>
 
-<div class="cards">
-<div class="card">🚛 Autovežiai<br><b>12</b></div>
-<div class="card">🚚 Priekabos<br><b>18</b></div>
-<div class="card">🚗 Auto<br><b>67</b></div>
-<div class="card">💰 Pajamos<br><b>18 450 €</b></div>
+    <div id="dashboard" class="section">
+        <h1>Dashboard</h1>
+
+        <div class="cards">
+            <div class="card">
+                <h3>🚛 Autovežiai</h3>
+                <span id="truckCount">0</span>
+            </div>
+
+            <div class="card">
+                <h3>🚚 Priekabos</h3>
+                <span id="trailerCount">0</span>
+            </div>
+
+            <div class="card">
+                <h3>👨‍✈️ Vairuotojai</h3>
+                <span id="driverCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="trucks" class="section hidden">
+
+        <h1>Autovežiai</h1>
+
+        <input id="truckNumber" placeholder="Numeris">
+        <input id="truckBrand" placeholder="Markė">
+        <input id="truckModel" placeholder="Modelis">
+        <input id="truckMileage" placeholder="Rida">
+
+        <button onclick="addTruck()">Pridėti</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Numeris</th>
+                    <th>Markė</th>
+                    <th>Modelis</th>
+                    <th>Rida</th>
+                </tr>
+            </thead>
+
+            <tbody id="truckTable"></tbody>
+        </table>
+
+    </div>
+
+    <div id="trailers" class="section hidden">
+
+        <h1>Priekabos</h1>
+
+        <input id="trailerNumber" placeholder="Numeris">
+        <input id="trailerType" placeholder="Tipas">
+
+        <button onclick="addTrailer()">Pridėti</button>
+
+        <table>
+            <tbody id="trailerTable"></tbody>
+        </table>
+
+    </div>
+
+    <div id="drivers" class="section hidden">
+
+        <h1>Vairuotojai</h1>
+
+        <input id="driverName" placeholder="Vardas Pavardė">
+
+        <button onclick="addDriver()">Pridėti</button>
+
+        <table>
+            <tbody id="driverTable"></tbody>
+        </table>
+
+    </div>
+
 </div>
 
-<div class="section">
-<h3>Naujas transportavimo užsakymas</h3>
-<input placeholder="Klientas">
-<input placeholder="Autovežio numeris">
-<input placeholder="Priekabos numeris">
-<input placeholder="Vairuotojas">
-<input placeholder="Pakrovimo vieta">
-<input placeholder="Iškrovimo vieta">
-<input placeholder="VIN numeris">
-<textarea placeholder="Pastabos"></textarea>
-<button>💾 Išsaugoti</button>
-</div>
+<script src="app.js"></script>
 
-<div class="section">
-<h3>Aktyvūs užsakymai</h3>
-<table>
-<tr>
-<th>Klientas</th>
-<th>Autovežis</th>
-<th>Priekaba</th>
-<th>Statusas</th>
-</tr>
-<tr>
-<td>BMW France</td>
-<td>NLD079</td>
-<td>ABC123</td>
-<td>Kelyje</td>
-</tr>
-</table>
-</div>
-
-<div class="section">
-<h3>🤖 AI Asistentas</h3>
-<textarea id="q" placeholder="Aprašyk problemą ar reisą"></textarea>
-<button onclick="ai()">Analizuoti</button>
-<p id="a"></p>
-</div>
-</div>
-
-<script>
-function ai(){
-let q=document.getElementById('q').value.toLowerCase();
-let r="Reikalinga papildoma analizė.";
-if(q.includes('adblue')) r="Patikrinti NOx sensorių, AdBlue siurblį ir laidyną.";
-if(q.includes('žib')) r="Patikrinti lemputę, saugiklį ir instaliaciją.";
-if(q.includes('reisas')) r="Įvertinti maršrutą, kuro sąnaudas ir vairavimo laiką.";
-document.getElementById('a').innerText=r;
-}
-</script>
 </body>
 </html>
