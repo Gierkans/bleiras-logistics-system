@@ -1,103 +1,169 @@
+// Duomenys
 let trucks = JSON.parse(localStorage.getItem("trucks")) || [];
 let trailers = JSON.parse(localStorage.getItem("trailers")) || [];
 let drivers = JSON.parse(localStorage.getItem("drivers")) || [];
-let services = JSON.parse(localStorage.getItem("services")) || [];
+let defects = JSON.parse(localStorage.getItem("defects")) || [];
 
-function showSection(id){
-
-document.querySelectorAll('.section')
-.forEach(section => section.classList.add('hidden'));
-
-document.getElementById(id)
-.classList.remove('hidden');
-
+// Išsaugojimas
+function saveData() {
+    localStorage.setItem("trucks", JSON.stringify(trucks));
+    localStorage.setItem("trailers", JSON.stringify(trailers));
+    localStorage.setItem("drivers", JSON.stringify(drivers));
+    localStorage.setItem("defects", JSON.stringify(defects));
 }
 
-function addTruck(){
+// Navigacija
+function showSection(sectionId) {
+    document.querySelectorAll(".section").forEach(sec => {
+        sec.classList.add("hidden");
+    });
 
-let truck = {
-number: truckNumber.value,
-brand: truckBrand.value,
-model: truckModel.value,
-mileage: truckMileage.value
-};
-
-trucks.push(truck);
-
-render();
-
+    document.getElementById(sectionId).classList.remove("hidden");
 }
 
-function addTrailer(){
+// Autovežis
+function addTruck() {
 
-trailers.push({
-number: trailerNumber.value,
-type: trailerType.value
-});
+    const truck = {
+        number: truckNumber.value,
+        brand: truckBrand.value,
+        model: truckModel.value,
+        mileage: truckMileage.value
+    };
 
-render();
+    if (!truck.number) return;
 
-}
+    trucks.push(truck);
 
-function addDriver(){
+    truckNumber.value = "";
+    truckBrand.value = "";
+    truckModel.value = "";
+    truckMileage.value = "";
 
-drivers.push({
-name: driverName.value
-});
-localStorage.setItem("trucks", JSON.stringify(trucks));
-localStorage.setItem("trailers", JSON.stringify(trailers));
-localStorage.setItem("drivers", JSON.stringify(drivers));
-localStorage.setItem("services", JSON.stringify(services));j
-render();
-window.onload = function(){
+    saveData();
     render();
 }
+
+// Priekaba
+function addTrailer() {
+
+    const trailer = {
+        number: trailerNumber.value,
+        type: trailerType.value
+    };
+
+    if (!trailer.number) return;
+
+    trailers.push(trailer);
+
+    trailerNumber.value = "";
+    trailerType.value = "";
+
+    saveData();
+    render();
 }
 
-function render(){
+// Vairuotojas
+function addDriver() {
 
-truckCount.innerText = trucks.length;
-trailerCount.innerText = trailers.length;
-driverCount.innerText = drivers.length;
+    const driver = {
+        name: driverName.value
+    };
 
-truckTable.innerHTML = "";
+    if (!driver.name) return;
 
-trucks.forEach(t => {
+    drivers.push(driver);
 
-truckTable.innerHTML += `
-<tr>
-<td>${t.number}</td>
-<td>${t.brand}</td>
-<td>${t.model}</td>
-<td>${t.mileage}</td>
-</tr>
-`;
+    driverName.value = "";
 
-});
-
-trailerTable.innerHTML = "";
-
-trailers.forEach(t => {
-
-trailerTable.innerHTML += `
-<tr>
-<td>${t.number}</td>
-<td>${t.type}</td>
-</tr>
-`;
-
-});
-
-driverTable.innerHTML = "";
-
-drivers.forEach(d => {
-
-driverTable.innerHTML += `
-<tr>
-<td>${d.name}</td>
-</tr>
-`;
-
-});
-
+    saveData();
+    render();
 }
+
+// Gedimas
+function addDefect() {
+
+    const defect = {
+        truck: defectTruck.value,
+        text: defectText.value,
+        date: new Date().toLocaleDateString("lt-LT")
+    };
+
+    if (!defect.truck || !defect.text) return;
+
+    defects.push(defect);
+
+    defectTruck.value = "";
+    defectText.value = "";
+
+    saveData();
+    render();
+}
+
+// Atvaizdavimas
+function render() {
+
+    // Statistika
+    truckCount.innerText = trucks.length;
+    trailerCount.innerText = trailers.length;
+    driverCount.innerText = drivers.length;
+
+    // Autovežiai
+    truckTable.innerHTML = "";
+
+    trucks.forEach(t => {
+
+        truckTable.innerHTML += `
+        <tr>
+            <td>${t.number}</td>
+            <td>${t.brand}</td>
+            <td>${t.model}</td>
+            <td>${t.mileage}</td>
+        </tr>
+        `;
+    });
+
+    // Priekabos
+    trailerTable.innerHTML = "";
+
+    trailers.forEach(t => {
+
+        trailerTable.innerHTML += `
+        <tr>
+            <td>${t.number}</td>
+            <td>${t.type}</td>
+        </tr>
+        `;
+    });
+
+    // Vairuotojai
+    driverTable.innerHTML = "";
+
+    drivers.forEach(d => {
+
+        driverTable.innerHTML += `
+        <tr>
+            <td>${d.name}</td>
+        </tr>
+        `;
+    });
+
+    // Gedimai
+    if (typeof defectTable !== "undefined") {
+
+        defectTable.innerHTML = "";
+
+        defects.forEach(d => {
+
+            defectTable.innerHTML += `
+            <tr>
+                <td>${d.date}</td>
+                <td>${d.truck}</td>
+                <td>${d.text}</td>
+            </tr>
+            `;
+        });
+    }
+}
+
+render();
